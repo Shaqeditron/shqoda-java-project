@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.portMap;
 import frc.robot.Constants.FeederConstants;
 // motor place and משתנים 
-public class Feeder extends SubsystemBase {
+public class Feeder extends SubsystemBase {  
   public enum FeederState {
         IDLE,  
       HOLDING,      
