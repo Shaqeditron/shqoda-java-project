@@ -11,8 +11,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.portMap;
 import frc.robot.Constants.shooterConstants;
-// הגדרת משתנים ורכיבי חומרה
+// motor place and משתנים 
 public class shooter extends SubsystemBase {
   public enum ShooterState {
         IDLE,        
@@ -21,8 +22,8 @@ public class shooter extends SubsystemBase {
         SLOW_EJECT   
     }
 
-  private final TalonFX masterMotor = new TalonFX(shooterConstants.MASTER_MOTOR_ID);
-  private final TalonFX followerMotor = new TalonFX(shooterConstants.FOLLOWER_MOTOR_ID);
+  private final TalonFX masterMotor = new TalonFX(portMap.Shooter.MASTER_MOTOR);
+  private final TalonFX followerMotor = new TalonFX(portMap.Shooter.MASTER_MOTOR + 1);
 
   private StatusSignal<AngularVelocity> velocitySignal = masterMotor.getVelocity();
   
@@ -55,7 +56,7 @@ public class shooter extends SubsystemBase {
   }
 
   public void setVelocity(double Velocity){
-    masterMotor.setControl(new VelocityVoltage(Velocity));
+        masterMotor.setControl(new VelocityVoltage(Velocity));
   }
 public double getCurrentVelocity() {
         return velocitySignal.refresh().getValueAsDouble(); 
@@ -63,7 +64,7 @@ public double getCurrentVelocity() {
   private void setState(ShooterState newShooterState){
     this.currentState = newShooterState;
   }
-  public ShooterState getState(){ 
+  public ShooterState getState(){     
       return currentState;
   }
   
@@ -81,20 +82,14 @@ public void periodic() {
 
         case RAMPING:
             setVelocity(60.0);
-            if (isAtTargetVelocity()) {
-                currentState = ShooterState.AT_VELOCITY;
-            }
             break;
 
         case AT_VELOCITY:
             setVelocity(60.0);
-            if (!isAtTargetVelocity()) {
-                currentState = ShooterState.RAMPING;
-            }
             break;
 
         case SLOW_EJECT:
-            setVelocity(15.0);
+            setVelocity(-15.0);
             break;
     }
 }
